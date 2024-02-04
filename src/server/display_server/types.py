@@ -11,7 +11,6 @@ class DisplayServerType(Enum):
 
     def __str__(self):
         return self.name
-    
 
 
 class DesktopEnvironmentType(Enum):

@@ -1,8 +1,8 @@
-from log import log, LogType
+from src.log import log, LogType
 from PySide6.QtGui import QGuiApplication, QScreen, QWindow
-from server.display_server.main import DisplayServerManager
-from server.selection.selection import Selection
-from server.selection.type import SourceType, CaptureType
+from src.server.display_server.main import DisplayServerManager
+from src.server.selection.selection import Selection
+from src.server.selection.type import SourceType, CaptureType
 
 
 
