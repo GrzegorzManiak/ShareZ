@@ -1,22 +1,16 @@
 from enum import Enum
 import datetime
 
-
-class LogType(Enum):
-    INFO = 0
-    WARNING = 1
-    ERROR = 2
-
-    def __str__(self):
-        return self.name
+from logger.type import Type
+from logger.colors import TerminalColor
 
 
 def log(
-        log_type: LogType,
+        log_type: Type,
         *args,
 ) -> None:
     """
-        Logs a message to the console and to the log file. 
+        Logs a message to the console and to the log file.
         (TODO: implement log file)
 
         [TIMESTAMP] [LOG_TYPE]: ARGS...
@@ -33,9 +27,21 @@ def log(
     timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # -- Create the log message
-    log_message = f"[{timestamp}] [{log_type}]: "
+    log_message = f"{TerminalColor.WHITE}[{timestamp}] {log_type.get_color()}[{log_type}]{TerminalColor.CLEAR}: "
     for arg in args:
         log_message += str(arg) + " "
 
     # -- Log the message to the console
     print(log_message)
+
+
+def error(*args):
+    log(Type.ERROR, *args)
+
+
+def warn(*args):
+    log(Type.WARNING, *args)
+
+
+def info(*args):
+    log(Type.INFO, *args)

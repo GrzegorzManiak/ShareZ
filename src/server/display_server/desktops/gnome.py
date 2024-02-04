@@ -1,6 +1,6 @@
 from src.server.display_server.desktop import BaseDesktop
 from src.server.display_server.types import DesktopEnvironmentType, DisplayServerType
-from src.log import log, LogType
+from src.logger import log
 
 # -- Gnome specific imports
 
@@ -14,7 +14,7 @@ class Gnome(BaseDesktop):
         """
             Creates a new Gnome object.
         """
-        log(LogType.INFO, "Gnome.__init__")
+        log.info("Gnome.__init__")
         super().__init__(display_server, DesktopEnvironmentType.GNOME)
 
 
@@ -27,7 +27,7 @@ class Gnome(BaseDesktop):
             Returns:
                 list: A list of all windows.
         """
-        log(LogType.INFO, "Gnome.get_all_windows")
+        log.info("Gnome.get_all_windows")
 
  
         return []

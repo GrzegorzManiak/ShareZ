@@ -2,9 +2,39 @@ from PySide6.QtGui import QGuiApplication
 from src.server.display_server.desktop import BaseDesktop
 from src.server.display_server.types import DesktopEnvironmentType, DisplayServerType
 from src.server.other import Singleton
-from src.log import log, LogType
+from src.logger import log
 import os
 from src.server.selection.selection import Selection
+
+
+def _get_desktop_environment() -> DesktopEnvironmentType:
+    """
+        Gets the type of desktop environment.
+
+        Returns:
+            DesktopEnvironmentType: The type of desktop environment.
+    """
+
+    # -- Get the desktop environment type
+    desktop_environment_name = os.environ.get("DESKTOP_SESSION")
+    if desktop_environment_name is None:
+        desktop_environment_name = os.environ.get("XDG_CURRENT_DESKTOP")
+
+    # -- Ensure that the desktop environment name is not None
+    if desktop_environment_name is None:
+        log.error("Desktop environment is Unknown")
+        return DesktopEnvironmentType.UNKNOWN
+
+    # -- Get the desktop environment type
+    log.info(f"Desktop environment: {desktop_environment_name}")
+    match desktop_environment_name.lower():
+        case 'gnome':
+            return DesktopEnvironmentType.GNOME
+        case _:
+            log.warn("Desktop environment is Unknown")
+
+    # -- Should not happen but just in case
+    return DesktopEnvironmentType.UNKNOWN
 
 
 class DisplayServerManager(metaclass=Singleton):
@@ -21,9 +51,9 @@ class DisplayServerManager(metaclass=Singleton):
             Creates a new DbusManager object.
         """
 
-        log(LogType.INFO, "DisplayServerManager.__init__")
+        log.info("DisplayServerManager.__init__")
         self._display_server_type = self._get_display_server()
-        self._desktop_environment_type = self._get_desktop_environment()
+        self._desktop_environment_type = _get_desktop_environment()
 
         # -- Create the desktop object
         match self._desktop_environment_type:
@@ -49,46 +79,17 @@ class DisplayServerManager(metaclass=Singleton):
 
         # -- Get the display server type
         server_name = QGuiApplication.platformName()
-        log(LogType.INFO, f"Display server: {server_name}")
+        log.info(f"Display server: {server_name}")
         match server_name.lower():
             case 'xcb':
                 return DisplayServerType.X11
             case 'wayland':
                 return DisplayServerType.WAYLAND
             case _:
-                log(LogType.WARNING, "Display server is Unknown")
+                log.warn("Display server is Unknown")
 
         # -- Should not happen but just in case
         return DisplayServerType.UNKNOWN
-
-    def _get_desktop_environment(self) -> DesktopEnvironmentType:
-        """
-            Gets the type of desktop environment.
-
-            Returns:
-                DesktopEnvironmentType: The type of desktop environment.
-        """
-
-        # -- Get the desktop environment type
-        desktop_environment_name = os.environ.get("DESKTOP_SESSION")
-        if desktop_environment_name is None:
-            desktop_environment_name = os.environ.get("XDG_CURRENT_DESKTOP")
-
-        # -- Ensure that the desktop environment name is not None
-        if desktop_environment_name is None:
-            log(LogType.ERROR, "Desktop environment is Unknown")
-            return DesktopEnvironmentType.UNKNOWN
-
-        # -- Get the desktop environment type
-        log(LogType.INFO, f"Desktop environment: {desktop_environment_name}")
-        match desktop_environment_name.lower():
-            case 'gnome':
-                return DesktopEnvironmentType.GNOME
-            case _:
-                log(LogType.WARNING, "Desktop environment is Unknown")
-
-        # -- Should not happen but just in case
-        return DesktopEnvironmentType.UNKNOWN
 
     def get_all_windows(self) -> list[Selection]:
         """

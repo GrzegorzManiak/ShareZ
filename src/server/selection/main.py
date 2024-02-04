@@ -1,4 +1,4 @@
-from src.log import log, LogType
+from src.logger import log
 from PySide6.QtGui import QGuiApplication, QScreen, QWindow
 from src.server.display_server.main import DisplayServerManager
 from src.server.selection.selection import Selection
@@ -19,7 +19,7 @@ def get_all_screens(
         Returns:
             List[Selection]: A list of all screens that are connected to the computer.
     """
-    log(LogType.INFO, "Getting all screens")
+    log.info("Getting all screens")
     screens = QGuiApplication.screens()
 
     # -- Create a list of Selection objects
