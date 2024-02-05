@@ -1,6 +1,6 @@
 import GLib from "gi://GLib";
-import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
-import Logger from "./logger/log.js";
+import Logger from "./logger/log";
+import { Extension } from '@girs/gnome-shell/extensions/extension';
 
 export default class extends Extension {
 
@@ -10,6 +10,5 @@ export default class extends Extension {
 
     public disable() {
         Logger.info('Disabling extension');
-        
     }
 }

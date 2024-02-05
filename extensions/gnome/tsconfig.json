@@ -1,10 +1,13 @@
 {
     "compilerOptions": {
-        "lib": ["ES2022"],
-        "types": [],
+        "lib": [
+            "ESNext"
+        ],
+        "types": [
+        ],
         "target": "ES2022",
-        "module": "Node16",
-        "moduleResolution": "Node16",
+        "module": "ESNext",
+        "moduleResolution": "node",
         "rootDir": "./src",
         "outDir": "../../dist/gnome",
         "forceConsistentCasingInFileNames": true,

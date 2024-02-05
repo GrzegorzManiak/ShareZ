@@ -3,18 +3,13 @@
   "version": "0.0.1",
   "description": "ShareZ is a GNOME Shell extension that communicates with the ShareZ application to Window information",
   "author": "GrzegorzManiak",
-  "module": "../../gnome/dist/extension.js",
-  "type": "module",
   "scripts": {
+    "build": "bun run esbuild.config.js",
+    "build-watch": "nodemon --watch . --exec 'npm run build'",
 
-    "build": "tsc",
-    "build-watch": "tsc -w",
+    "install-ext": "gnome-extensions install -f ../../dist/gnome/sharez@grzegorz.ie.zip",
 
-    "compile": "tar -czf ./sharez.dist.tgz -C ../../dist/gnome .",
-    "install-ext": "gnome-extensions install -f ./sharez.dist.tgz",
-
-    "automate": "nodemon --watch . --exec 'tsc --build tsconfig.json && npm run compile && npm run install-ext'",
-
+    "automate": "nodemon --watch . --exec 'npm run build && npm run install-ext'",
     "debug-shell": "dbus-run-session -- gnome-shell --nested --wayland",
     "monitor-dbus": "dbus-monitor \"interface='com.grzegorzm.sharez',path='/com/grzegorzm/sharez'\"",
     "monitor-logs": "journalctl /usr/bin/gnome-shell -f -o cat"
@@ -32,6 +27,7 @@
     "ts-loader": "^9.3.1",
     "ts-node": "^10.9.1",
     "typescript": "^4.9.3",
+    "vite": "^5.0.12",
     "webpack-bundle-tracker": "^1.8.1",
     "webpack-shell-plugin": "^0.5.0",
     "webpack-shell-plugin-next": "^2.3.1"
@@ -41,17 +37,6 @@
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-flow": "^7.21.4",
     "@babel/preset-typescript": "^7.22.15",
-    "@types/adm-zip": "^0.5.1",
-    "@types/dompurify": "^2.4.0",
-    "babel-loader": "^8.3.0",
-    "clean-webpack-plugin": "^4.0.0",
-    "happypack": "^5.0.1",
-    "null-loader": "^4.0.1",
-    "random-words": "^1.3.0",
-    "terser-webpack-plugin": "^5.3.7",
-    "webpack": "^5.77.0",
-    "webpack-bundle-analyzer": "^4.8.0",
-    "webpack-cli": "^4.10.0",
     "@girs/adw-1": "^1.4.0-3.2.5",
     "@girs/clutter-13": "^13.0.0-3.2.5",
     "@girs/gdk-4.0": "^4.0.0-3.2.5",
@@ -64,6 +49,17 @@
     "@girs/mtk-13": "^13.0.0-3.2.5",
     "@girs/pango-1.0": "^1.51.0-3.2.5",
     "@girs/shell-13": "^13.0.0-3.2.5",
-    "@girs/st-13": "^13.0.0-3.2.5"
+    "@girs/st-13": "^13.0.0-3.2.5",
+    "@types/adm-zip": "^0.5.1",
+    "@types/dompurify": "^2.4.0",
+    "babel-loader": "^8.3.0",
+    "clean-webpack-plugin": "^4.0.0",
+    "happypack": "^5.0.1",
+    "null-loader": "^4.0.1",
+    "random-words": "^1.3.0",
+    "terser-webpack-plugin": "^5.3.7",
+    "webpack": "^5.77.0",
+    "webpack-bundle-analyzer": "^4.8.0",
+    "webpack-cli": "^4.10.0"
   }
 }

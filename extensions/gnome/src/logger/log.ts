@@ -5,7 +5,7 @@
  */
 
 
-import Type from './type.js';
+import Type from './type';
 
 /**
  * @name log_header
