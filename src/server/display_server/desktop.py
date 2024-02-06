@@ -1,5 +1,5 @@
-from src.server.display_server.types import DesktopEnvironmentType, DisplayServerType
-from src.logger import log
+from server.display_server.types import DesktopEnvironmentType, DisplayServerType
+from logger import log
 
 
 class BaseDesktop:

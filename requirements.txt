@@ -1,3 +1,5 @@
 pyside6
 outcome
 trio
+asyncio
+dbus_next

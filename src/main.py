@@ -10,9 +10,8 @@ from PySide6.QtWidgets import (QGridLayout, QLabel, QListView,
 from PySide6.QtGui import QAction, QGuiApplication
 from PySide6.QtCore import QItemSelection, Qt, Slot
 
-from src.logger import log
-from src.server.display_server.main import DisplayServerManager
-from src.server.selection.main import get_all_screens
+from logger import log
+from server.display_server.main import DisplayServerManager
 
 
 class SourceSelector(QWidget):
@@ -37,11 +36,6 @@ class SourceSelector(QWidget):
         # -- Onclick of the dropdown update the list of sources:
         self._source_list_view.activated.connect(self._update_source_list)
 
-        screens = get_all_screens()
-        log.info(f"Screens: {screens}")
-        for screen in screens:
-            log.info(f"Screen: {screen}")
-
         dsm = DisplayServerManager()
         windows = dsm.get_all_windows()
         log.info(f"Windows: {windows}")
@@ -55,7 +49,11 @@ class SourceSelector(QWidget):
     @Slot()
     def _update_source_list(self):
         log.info("Updating source list")
-        self._source_list_view.clear()
+        dsm = DisplayServerManager()
+        windows = dsm.get_all_windows()
+        log.info(f"Windows: {windows}")
+        for window in windows:
+            log.info(f"Window: {window}")
 
 
 class MainWindow(QWidget):
@@ -74,8 +72,9 @@ class MainWindow(QWidget):
 def main() -> None:
     log.info("Application started")
     app = QApplication(sys.argv)
-    QCoreApplication.setApplicationName("ShareY")
+    QCoreApplication.setApplicationName("ShareZ")
     QCoreApplication.setOrganizationName("Grzegorz.ie")
+    QCoreApplication.setApplicationVersion("0.1")
 
     # -- Create main window:
     main_window = MainWindow()

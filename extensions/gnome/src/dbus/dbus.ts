@@ -7,7 +7,8 @@ import Type from "../logger/type";
 
 export default class DBus {
 
-    public static readonly BUS_NAME: string = 'dev.grzegorzmaniak.sharez';
+    public static readonly BUS: string = 'org.gnome.Shell';
+    public static readonly INTERFACE: string = 'dev.grzegorzmaniak.sharez';
     public static readonly OBJECT_PATH: string = '/dev/grzegorzmaniak/sharez';
     public static readonly XML_INTERFACE: string = 'iface.xml';
 
@@ -81,7 +82,7 @@ export default class DBus {
         Logger.info('Acquiring bus');
         this._bus_id = Gio.bus_own_name(
             Gio.BusType.SESSION,
-            DBus.BUS_NAME,
+            DBus.INTERFACE,
             Gio.BusNameOwnerFlags.NONE,
             this.on_bus_acquired,
             this.on_name_acquired,
@@ -99,7 +100,7 @@ export default class DBus {
         user_data: any
     ): void => {
         Logger.info('Bus acquired', name);
-        this._dbus.export(connection, DBus.OBJECT_PATH);
+        this._dbus.export(Gio.DBus.session, DBus.OBJECT_PATH);
     };
 
 

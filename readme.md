@@ -26,3 +26,6 @@ I also want to get better at using multiple languages in the same project (C++ a
 - [ ] Image uploader (imgur, ShareX custom uploader, etc)
 - [ ] Customizable hotkeys
 - [ ] Multi monitor support
+- [ ] Desktop Environment integration
+    - [x] Gnome
+    - [ ] KDE
