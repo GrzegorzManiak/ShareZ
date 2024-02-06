@@ -105,6 +105,15 @@ class Selection:
         """
         return self._friendly_name if self._friendly_name is not None else "None"
 
+    def get_name(self) -> str:
+        """
+            Gets the name of the object.
+
+            Returns:
+                str: The name of the object.
+        """
+        return self._friendly_name if self._friendly_name is not None else "None"
+
     def set_friendly_name(self, name: str) -> None:
         """
             Sets the friendly name of the object.
@@ -133,3 +142,21 @@ class Selection:
         """
         if self._screen is None: log.error("Screen is None")
         return self._screen
+
+    def get_size(self) -> tuple[int, int]:
+        """
+            Gets the size of the area.
+
+            Returns:
+                tuple[int, int]: The size of the area.
+        """
+        return self._width, self._height
+
+    def get_position(self) -> tuple[int, int]:
+        """
+            Gets the position of the area.
+
+            Returns:
+                tuple[int, int]: The position of the area.
+        """
+        return self._x, self._y

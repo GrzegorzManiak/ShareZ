@@ -1,9 +1,11 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Logger from "../logger/log";
-import {get_focused_window, get_open_windows} from '../core/core';
+import {get_all_displays, get_focused_window, get_open_windows} from '../core/core';
 import Window from '../core/window';
 import Type from "../logger/type";
+import Gdk from "@girs/gdk-4.0";
+import Display = Gdk.Display;
 
 export default class DBus {
 
@@ -196,6 +198,11 @@ export default class DBus {
         get_focused_window: (): string => {
             const focused_window = get_focused_window();
             return focused_window ? JSON.stringify(focused_window) : '{}';
+        },
+
+        get_all_displays: (): Array<string> => {
+            const displays: Array<Display> = get_all_displays();
+            return displays.map((display) => JSON.stringify(display));
         },
 
         emmit_service_started: (): void => {

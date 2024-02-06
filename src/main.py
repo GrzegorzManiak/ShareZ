@@ -12,6 +12,7 @@ from PySide6.QtCore import QItemSelection, Qt, Slot
 
 from logger import log
 from server.display_server.main import DisplayServerManager
+from server.selection.selection import Selection
 
 
 class SourceSelector(QWidget):
@@ -22,10 +23,6 @@ class SourceSelector(QWidget):
 
         self._source_label = QLabel("Select source to capture:", self)
         self._source_list_view = QComboBox(self)
-        self._source_list_view.addItem("Select source to capture:")
-        self._source_list_view.addItem("Screen")
-        self._source_list_view.addItem("Window")
-        self._source_list_view.addItem("Area")
 
         self._source_list_view.currentIndexChanged.connect(self._source_selected)
 
@@ -38,22 +35,27 @@ class SourceSelector(QWidget):
 
         dsm = DisplayServerManager()
         windows = dsm.get_all_windows()
-        log.info(f"Windows: {windows}")
         for window in windows:
-            log.info(f"Window: {window}")
+            self._source_list_view.addItem(window.get_name(), window)
 
     @Slot()
     def _source_selected(self):
-        log.info(f"Source selected: {self._source_list_view.currentText()}")
+        selected_area = self._source_list_view.currentData()
+        if not isinstance(selected_area, Selection): return
+        log.info(f"Source selected: {selected_area}, Size: {selected_area.get_size()}, Position: {selected_area.get_position()}")
 
     @Slot()
     def _update_source_list(self):
         log.info("Updating source list")
+
+        # -- Clear the list
+        self._source_list_view.clear()
+
+        # -- Add all windows to the list
         dsm = DisplayServerManager()
         windows = dsm.get_all_windows()
-        log.info(f"Windows: {windows}")
         for window in windows:
-            log.info(f"Window: {window}")
+            self._source_list_view.addItem(window.get_name(), window)
 
 
 class MainWindow(QWidget):

@@ -1,12 +1,12 @@
 from PySide6.QtGui import QGuiApplication
 
-from server.display_server.desktop import BaseDesktop
+from server.display_server.desktops.desktop import BaseDesktop
 from server.display_server.types import DesktopEnvironmentType, DisplayServerType
 from server.other import Singleton
 from logger import log
 import os
 from server.selection.selection import Selection
-from server.selection.type import SourceType, CaptureType
+from server.selection.type import SourceType
 
 
 def _get_desktop_environment() -> DesktopEnvironmentType:
@@ -102,18 +102,15 @@ class DisplayServerManager(metaclass=Singleton):
         """
 
         log.info("DisplayServerManager.get_all_windows")
-        raw_windows = self._desktop.get_all_windows()
-        windows: list[Selection] = []
+        return self._desktop.get_all_windows()
 
-        for window in raw_windows:
-            windows.append(Selection(
-                SourceType.AREA,
-                x=window['_x'],
-                y=window['_y'],
-                width=window['_width'],
-                height=window['_height'],
-                friendly_name=window['_title'],
-                z=window['_z_index']
-            ))
+    def get_all_displays(self) -> list[Selection]:
+        """
+            Gets all displays that are connected to the computer.
 
-        return windows
+            Returns:
+                List[QScreen]: A list of all displays that are connected to the computer.
+        """
+
+        log.info("DisplayServerManager.get_all_displays")
+        return self._desktop.get_all_displays()

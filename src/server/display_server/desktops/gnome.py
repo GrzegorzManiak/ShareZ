@@ -1,9 +1,12 @@
 import json
 
-from server.display_server.desktop import BaseDesktop
+from server.display_server.desktops.desktop import BaseDesktop
 from server.display_server.types import DesktopEnvironmentType, DisplayServerType
 from logger import log
-from PySide6.QtDBus import QDBusConnection, QDBusInterface, QDBusMessage, QDBusReply
+from PySide6.QtDBus import QDBusConnection, QDBusInterface
+
+from server.selection.selection import Selection
+from server.selection.type import SourceType
 
 
 class Gnome(BaseDesktop):
@@ -54,13 +57,7 @@ class Gnome(BaseDesktop):
 
         log.info("------------------- Gnome.print_dbus_info -------------------")
 
-    def close_dbus(self):
-        """
-            Closes the dbus.
-        """
-        log.warn("Gnome.close_dbus")
-
-    def get_all_windows(self) -> list:
+    def get_all_windows(self) -> list[Selection]:
         """
             Gets all windows.
 
@@ -70,13 +67,60 @@ class Gnome(BaseDesktop):
         log.info("Gnome.get_all_windows")
 
         try:
+            # -- Call the dbus method
             reply = self._dbus_interface.call('get_open_windows')
             reply = reply.arguments()[0]
 
             # -- Parse the reply json
-            parsed = []
+            parsed: list[Selection] = []
             for window in reply:
-                parsed.append(json.loads(window))
+                parsed_window = json.loads(window)
+                parsed.append(Selection(
+                    SourceType.AREA,
+                    x=parsed_window['_x'],
+                    y=parsed_window['_y'],
+                    width=parsed_window['_width'],
+                    height=parsed_window['_height'],
+                    friendly_name=parsed_window['_title'],
+                    z=parsed_window['_z_index']
+                ))
+
+            # -- Return the parsed windows
+            return parsed
+
+        except Exception as e:
+            log.error(f"Error: {e}")
+            return []
+
+    def get_all_displays(self) -> list[Selection]:
+        """
+            Gets all displays.
+
+            Returns:
+                list: A list of all displays.
+        """
+        log.info("Gnome.get_all_displays")
+
+        try:
+            # -- Call the dbus method
+            reply = self._dbus_interface.call('get_all_displays')
+            reply = reply.arguments()[0]
+
+            # -- Parse the reply json
+            parsed: list[Selection] = []
+            count = 0
+            for display in reply:
+                parsed_display = json.loads(display)
+                parsed.append(Selection(
+                    SourceType.SCREEN,
+                    x=parsed_display['_x'],
+                    y=parsed_display['_y'],
+                    width=parsed_display['_width'],
+                    height=parsed_display['_height'],
+                    friendly_name=f"Display {count}",
+                ))
+
+            # -- Return the parsed displays
             return parsed
 
         except Exception as e:

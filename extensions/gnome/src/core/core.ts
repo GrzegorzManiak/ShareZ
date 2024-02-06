@@ -1,10 +1,13 @@
 import Window from './window';
-import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import { LayoutManager } from 'resource:///org/gnome/shell/ui/layout.js';
 
-import GLib from "gi://GLib";
+import GLib from 'gi://GLib';
 import Meta from 'gi://Meta';
+
 import Shell from 'gi://Shell';
-import Logger from "../logger/log";
+import Logger from '../logger/log';
+import Display from './display';
 const global = Shell.Global.get();
 
 
@@ -61,4 +64,27 @@ export const get_focused_window = (): Window | null => {
         meta_window.get_frame_rect().height,
         meta_window.get_layer()
     );
+}
+
+
+
+/**
+ * @name get_all_displays
+ * Returns a list of displays (monitors)
+ *
+ * @returns {Array<Display>} - A list of displays
+ */
+export const get_all_displays = (): Array<Display> => {
+    const displays: Array<Display> = [];
+
+    // -- Get all monitors
+    const monitors = new LayoutManager().monitors;
+    monitors.forEach((monitor) => displays.push(new Display(
+        monitor.x, monitor.y,
+        monitor.width, monitor.height,
+        monitor.index
+    )));
+
+    Logger.info('Found ' + displays.length + ' displays');
+    return displays;
 }

@@ -1,5 +1,6 @@
 from server.display_server.types import DesktopEnvironmentType, DisplayServerType
 from logger import log
+from server.selection.selection import Selection
 
 
 class BaseDesktop:
@@ -17,7 +18,7 @@ class BaseDesktop:
         self._display_server = display_server
         self._desktop_environment = desktop_environment
 
-    def get_all_windows(self) -> list:
+    def get_all_windows(self) -> list[Selection]:
         """
             Gets all windows.
 
@@ -25,4 +26,14 @@ class BaseDesktop:
                 list: A list of all windows.
         """
         log.warn("BaseDesktop.get_all_windows is not implemented")
+        return []
+
+    def get_all_displays(self) -> list[Selection]:
+        """
+            Gets all displays.
+
+            Returns:
+                list: A list of all displays.
+        """
+        log.warn("BaseDesktop.get_all_displays is not implemented")
         return []

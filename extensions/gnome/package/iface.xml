@@ -22,6 +22,16 @@
         </method>
 
         <!--
+            METHOD: get_all_displays
+            Returns a list of all displays
+
+            Returns: array of strings
+        -->
+        <method name='get_all_displays'>
+            <arg type='as' name='displays' direction='out'/>
+        </method>
+
+        <!--
             SIGNAL: service_started
             Emitted when the service is started
         -->
