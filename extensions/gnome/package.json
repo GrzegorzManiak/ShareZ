@@ -6,12 +6,11 @@
   "scripts": {
     "build": "bun run esbuild.config.js",
     "build-watch": "nodemon --watch . --exec 'npm run build'",
-
     "install-ext": "gnome-extensions install -f ../../dist/gnome/sharez@grzegorz.ie.zip",
-
-    "automate": "nodemon --watch . --exec 'npm run build && npm run install-ext'",
+    "automate": "nodemon",
     "debug-shell": "dbus-run-session -- gnome-shell --nested --wayland",
-    "monitor-dbus": "dbus-monitor \"interface='com.grzegorzm.sharez',path='/com/grzegorzm/sharez'\"",
+    "debug-shell-filterd": "dbus-run-session -- gnome-shell --nested --wayland | grep '^\\[SHAREZ\\]'\n",
+    "monitor-dbus": "dbus-monitor \"interface='dev.grzegorzmaniak.sharez',path='/dev/grzegorzmaniak/sharez'\"",
     "monitor-logs": "journalctl /usr/bin/gnome-shell -f -o cat"
   },
   "dependencies": {
@@ -48,7 +47,7 @@
     "@girs/meta-13": "^13.0.0-3.2.5",
     "@girs/mtk-13": "^13.0.0-3.2.5",
     "@girs/pango-1.0": "^1.51.0-3.2.5",
-    "@girs/shell-13": "^13.0.0-3.2.5",
+    "@girs/shell-13": "^13.0.0-3.2.7",
     "@girs/st-13": "^13.0.0-3.2.5",
     "@types/adm-zip": "^0.5.1",
     "@types/dompurify": "^2.4.0",

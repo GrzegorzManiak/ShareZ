@@ -30,8 +30,10 @@ require('esbuild').build({
     ],
     bundle: true,
     external: [
-        'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js',
-        'resource:///org/gnome/shell/extensions/extension.js'
+        'resource:///*',
+        'imports.gi/*',
+        'gi:/*',
+        '@girs/*'
     ],
 
     outdir: '../../dist/gnome',

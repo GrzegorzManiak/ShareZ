@@ -6,6 +6,10 @@
 
 
 import Type from './type';
+import Shell from 'gi://Shell';
+import DBus from "../dbus/dbus";
+const global = Shell.Global.get();
+
 
 /**
  * @name log_header
@@ -36,13 +40,16 @@ export default class Logger {
      * @returns {void} - Nothing, it just logs
      */
     public static log = (type: Type, ...args: Array<unknown>): void => {
+
         // -- Only log if we are in debug mode or an ERROR has occured
         // if (!LOG && type !== log_types.ERROR) return;
         const header = log_header(type),
             bold_style = 'font-weight: bold;';
 
         // -- Create the message, so the header, bolded, then the args
+        // @ts-ignore
         console.log(`[SHAREZ] ${header}`, ...args);
+        DBus.getInstance().dbus_log(type, header, args.join(' '));
     };
 
 

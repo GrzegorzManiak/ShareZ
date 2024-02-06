@@ -1,11 +1,10 @@
 {
-  "name": "NEW ShareZ GNOME Companion",
+  "name": "ShareZ Companion",
   "description": "ShareZ is a GNOME Shell extension that communicates with the ShareZ application to Window information",
   "shell-version": [
     "45"
   ],
   "url": "https://github.com/GrzegorzManiak/sharez",
-  "uuid": "ShareZNEW@grzegorz",
-  "version": 1,
-  "gettext-domain": "sharez"
+  "uuid": "ShareZ@grzegorz",
+  "version": 1
 }

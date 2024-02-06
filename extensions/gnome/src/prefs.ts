@@ -5,8 +5,13 @@ import Gio from "gi://Gio";
 import Gtk from "gi://Gtk";
 import Pango from "gi://Pango";
 
-import { ExtensionPreferences } from '@girs/gnome-shell/extensions/prefs';
+import { ExtensionPreferences } from "resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js";
 
 // @ts-ignore
 export default class extends ExtensionPreferences {
+
+    public constructor(metadata) {
+        super(metadata);
+    }
+
 }
