@@ -19,9 +19,6 @@ class Selection:
     def __init__(self,
                  source: SourceType,
 
-                 screen: QScreen | None = None,
-                 window: QWindow | None = None,
-
                  x: int | None = None,
                  y: int | None = None,
                  width: int | None = None,
@@ -36,8 +33,6 @@ class Selection:
 
             Args:
                 source (SourceType): The type of source that is or has been selected.
-                screen (QScreen): The screen that is or has been selected.
-                window (QWindow): The window that is or has been selected.
                 x (int): The x position of the area.
                 y (int): The y position of the area.
                 z (int): The z index of the area (E.g. The window level).
@@ -48,50 +43,16 @@ class Selection:
         self._type = source
         self._z = z
 
-        # -- Auto assign the x, y, width and height if
-        #    they are not provided depending on the
-        #    source type
-        match source:
+        # -- Ensure all values are provided
+        if x is None or y is None or width is None or height is None:
+            log.error("x, y, width or height is None")
+            pass
 
-            case SourceType.SCREEN:
-
-                # -- Screen is simple enough
-                self._x = 0
-                self._y = 0
-                self._width = screen.size().width()
-                self._height = screen.size().height()
-                self._friendly_name = screen.name()
-                self._screen = screen
-
-            case SourceType.WINDOW:
-
-                # -- Ensure that the window is not None
-                if window is None:
-                    log.error("Window is None")
-                    pass
-
-                position = window.position()
-                size = window.size()
-
-                self._x = position.x()
-                self._y = position.y()
-                self._width = size.width()
-                self._height = size.height()
-                self._friendly_name = window.title()
-                self._window = window
-
-            case SourceType.AREA:
-
-                # -- Ensure all values are provided
-                if x is None or y is None or width is None or height is None:
-                    log.error("x, y, width or height is None")
-                    pass
-
-                self._x = x
-                self._y = y
-                self._width = width
-                self._height = height
-                self._friendly_name = f"Area: {x}, {y}"
+        self._x = x
+        self._y = y
+        self._width = width
+        self._height = height
+        self._friendly_name = f"Area: {x}, {y}"
 
         # -- Set the friendly name (If provided, overrides the default)
         self._friendly_name = friendly_name
@@ -160,3 +121,9 @@ class Selection:
                 tuple[int, int]: The position of the area.
         """
         return self._x, self._y
+
+    def x(self) -> int: return self._x
+    def y(self) -> int: return self._y
+    def width(self) -> int: return self._width
+    def height(self) -> int: return self._height
+

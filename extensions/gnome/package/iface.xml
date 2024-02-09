@@ -32,6 +32,16 @@
         </method>
 
         <!--
+            METHOD: get_active_display
+            Returns the active display
+
+            Returns: string
+        -->
+        <method name='get_active_display'>
+            <arg type='s' name='display' direction='out'/>
+        </method>
+
+        <!--
             SIGNAL: service_started
             Emitted when the service is started
         -->

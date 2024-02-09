@@ -1,11 +1,6 @@
 import { Extension } from "resource:///org/gnome/shell/extensions/extension.js";
-
-import GLib from "gi://GLib";
 import Logger from "./logger/log";
-import Meta from 'gi://Meta';
-import Shell from 'gi://Shell';
 import DBus from "./dbus/dbus";
-const global = Shell.Global.get();
 
 export default class ShareZ extends Extension {
     private static _dbus: DBus;

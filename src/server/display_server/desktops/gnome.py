@@ -10,9 +10,9 @@ from server.selection.type import SourceType
 
 
 class Gnome(BaseDesktop):
-    _BUS_NAME = 'dev.grzegorzmaniak.sharez'
-    _OBJECT_PATH = '/dev/grzegorzmaniak/sharez'
-    _INTERFACE = 'dev.grzegorzmaniak.sharez'
+    _BUS_NAME = 'dev.grzegorzmaniak.sharez.gnome'
+    _INTERFACE = 'dev.grzegorzmaniak.sharez.gnome'
+    _OBJECT_PATH = '/'
 
     _dbus_interface: QDBusInterface
     _dbus_connection: QDBusConnection
@@ -24,29 +24,32 @@ class Gnome(BaseDesktop):
         log.info("Gnome.__init__")
         super().__init__(display_server, DesktopEnvironmentType.GNOME)
         self.connect_to_dbus()
+        self.print_dbus_info()
 
     def connect_to_dbus(self):
         """
             Connects to the dbus.
         """
         log.info("Gnome.connect_to_dbus")
-        self._dbus_connection = QDBusConnection.sessionBus()
-        self._dbus_interface = QDBusInterface(
-            self._BUS_NAME,
-            self._OBJECT_PATH,
-            self._INTERFACE,
-            self._dbus_connection
-        )
+        try:
+            self._dbus_connection = QDBusConnection.sessionBus()
+            self._dbus_interface = QDBusInterface(
+                self._BUS_NAME,
+                self._OBJECT_PATH,
+                self._INTERFACE,
+                self._dbus_connection
+            )
 
-        self.print_dbus_info()
+        except Exception as e:
+            log.error(f"GDB Error: {e}")
 
     def print_dbus_info(self):
         log.info("------------------- Gnome.print_dbus_info -------------------")
 
         log.info(f"Services")
-        services = self._dbus_connection.interface().registeredServiceNames()
-        for service in services.value():
-            log.info(f"- Service: {service}")
+        # services = self._dbus_connection.interface().registeredServiceNames()
+        # for service in services.value():
+        #     log.info(f"- Service: {service}")
 
         log.info(f"Bus name: {self._dbus_interface.service()}")
         log.info(f"Object path: {self._dbus_interface.path()}")
@@ -114,9 +117,10 @@ class Gnome(BaseDesktop):
                 parsed.append(Selection(
                     SourceType.SCREEN,
                     x=parsed_display['_x'],
-                    y=parsed_display['_y'],
+                    y=y,
                     width=parsed_display['_width'],
                     height=parsed_display['_height'],
+                    z=parsed_display['_index'],
                     friendly_name=f"Display {count}",
                 ))
 
@@ -124,5 +128,34 @@ class Gnome(BaseDesktop):
             return parsed
 
         except Exception as e:
-            log.error(f"Error: {e}")
+            log.error(f"Get all displays Error: {e}")
             return []
+
+    def get_active_display(self) -> None or Selection:
+        """
+            Gets the active display.
+
+            Returns:
+                Selection: The active display.
+        """
+        log.info("Gnome.get_active_display")
+
+        try:
+            # -- Call the dbus method
+            reply = self._dbus_interface.call('get_active_display')
+            reply = reply.arguments()[0]
+            parsed_display = json.loads(reply)
+
+            return Selection(
+                SourceType.SCREEN,
+                x=parsed_display['_x'],
+                y=y,
+                width=parsed_display['_width'],
+                height=parsed_display['_height'],
+                z=parsed_display['_index'],
+                friendly_name="Active Display"
+            )
+
+        except Exception as e:
+            log.error(f"Get active display Error: {e}")
+            return None

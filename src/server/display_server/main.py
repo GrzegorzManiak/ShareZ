@@ -114,3 +114,31 @@ class DisplayServerManager(metaclass=Singleton):
 
         log.info("DisplayServerManager.get_all_displays")
         return self._desktop.get_all_displays()
+
+    def calc_total_size(self) -> tuple[tuple[int, int], tuple[int, int]]:
+        """
+            Calculates the total size of all the displays.
+
+            Returns:
+                tuple[tuple[int, int], tuple[int, int]]: The total size of all the displays.
+        """
+
+        log.info("DisplayServerManager.calc_total_size")
+        displays = self.get_all_displays()
+
+        # -- Top left corner
+        max_x = 0
+        max_y = 0
+
+        # -- Bottom right corner
+        min_x = 0
+        min_y = 0
+
+        for display in displays:
+            max_x = max(max_x, display.x())
+            max_y = max(max_y, display.y())
+
+            min_x = min(min_x, display.x() + display.width())
+            min_y = min(min_y, display.y() + display.height())
+
+        return (max_x, max_y), (min_x, min_y)

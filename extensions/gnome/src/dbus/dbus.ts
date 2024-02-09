@@ -1,17 +1,15 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
-import Logger from "../logger/log";
-import {get_all_displays, get_focused_window, get_open_windows} from '../core/core';
+import Logger from '../logger/log';
+import {get_active_display, get_all_displays, get_focused_window, get_open_windows} from '../core/core';
 import Window from '../core/window';
-import Type from "../logger/type";
-import Gdk from "@girs/gdk-4.0";
-import Display = Gdk.Display;
+import Type from '../logger/type';
+import Display from '../core/display';
 
 export default class DBus {
 
-    public static readonly BUS: string = 'org.gnome.Shell';
-    public static readonly INTERFACE: string = 'dev.grzegorzmaniak.sharez';
-    public static readonly OBJECT_PATH: string = '/dev/grzegorzmaniak/sharez';
+    public static readonly INTERFACE: string = 'dev.grzegorzmaniak.sharez.gnome';
+    public static readonly OBJECT_PATH: string = '/';
     public static readonly XML_INTERFACE: string = 'iface.xml';
 
     private static _instance: DBus;
@@ -203,6 +201,11 @@ export default class DBus {
         get_all_displays: (): Array<string> => {
             const displays: Array<Display> = get_all_displays();
             return displays.map((display) => JSON.stringify(display));
+        },
+
+        get_active_display: (): string => {
+            const active_display = get_active_display();
+            return active_display ? JSON.stringify(active_display) : '{}';
         },
 
         emmit_service_started: (): void => {

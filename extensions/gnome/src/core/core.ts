@@ -1,9 +1,5 @@
 import Window from './window';
-import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
 import { LayoutManager } from 'resource:///org/gnome/shell/ui/layout.js';
-
-import GLib from 'gi://GLib';
-import Meta from 'gi://Meta';
 
 import Shell from 'gi://Shell';
 import Logger from '../logger/log';
@@ -87,4 +83,23 @@ export const get_all_displays = (): Array<Display> => {
 
     Logger.info('Found ' + displays.length + ' displays');
     return displays;
+}
+
+
+
+/**
+ * @name get_active_display
+ * Returns the active display (monitor)
+ *
+ * @returns {Display} - The active display
+ */
+export const get_active_display = (): Display | null => {
+    const monitor = global.display.get_primary_monitor(),
+        displays = get_all_displays();
+
+    const display = displays.find((display) => display.index === monitor);
+    if (!display) return null;
+
+    Logger.info('Active display: ' + display.index);
+    return display;
 }
